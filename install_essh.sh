@@ -10,6 +10,8 @@ if ! command -v essh &> /dev/null; then
   echo "Downloading essh..."
   wget https://github.com/sevir/essh/releases/download/v3.5.0/essh_linux_amd64.zip
   unzip essh_linux_amd64.zip -d ~/.bin
+  mv ~/.bin/essh_linux_amd64 ~/.bin/essh
+  chmod +x ~/.bin/essh
   rm essh_linux_amd64.zip
 
   echo "Finished installing essh"
