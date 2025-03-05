@@ -58,8 +58,13 @@ driver "essh-lua" {
         # Detect if essh is installed
         if ! command -v essh &> /dev/null
         then
-            echo "essh could not be found. Please install it."
-            exit 1
+            # Try to extend the PATH
+            export PATH=$PATH:$HOME/.bin
+            if ! command -v essh &> /dev/null
+            then
+                echo "essh could not be found. Please install it."
+                exit 1
+            fi
         fi
         
         set -e
