@@ -89,8 +89,30 @@ function table_join(table, separator)
     return result
 end
 
--- capistrano like copy function
-function capistrano(tmp_path_folder, dest)
-    print("Capistrano like copy")
+
+
+-- Capistrano like deploy
+-- This function moves the folder from tmp_path_folder to dest/releases/yyyymmddHHMMSS
+-- and creates a symlink to the shared folders
+-- finally it creates a symlink to the current folder
+--
+-- Parameters:
+-- tmp_path_folder: the folder where the files are stored
+-- dest: the destination folder
+-- shared_folders: the folders that are shared between releases
+
+function capistrano(tmp_path_folder, dest, shared_folders)
+    local release = sh.date("+%Y%m%d%H%M%S"):strip()
+    local release_folder = dest .. "/releases/" .. release
+    local current_folder = dest .. "/current"
+    local shared_folder = dest .. "/shared"
+
+    sh.mkdir("-p", release_folder)
+    sh.mv(tmp_path_folder .. "/*", release_folder)
+    sh.ln("-sfn", release_folder, current_folder)
+
+    for i, folder in ipairs(shared_folders) do
+        sh.ln("-sfn", shared_folder .. "/" .. folder, release_folder .. "/" .. folder)
+    end
 end
 
