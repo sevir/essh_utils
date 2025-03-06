@@ -7,23 +7,7 @@ task "install_essh_utils" {
 -- Example of remote task for installing essh_utils
 task "install_essh_utils:remote" {
     backend = "remote",
-    prepare = function(t)
-        local sh = require("sh")
-        
-        if not t.args[1] then
-            sh.essh("--hosts")
-            local question = require("question")
-
-            print("Please inform the target to install essh_utils")
-            t.targets = question.ask("Host or tag: ")
-            
-            return true
-        else
-            t.targets = t.args[1]
-            return true
-        end
-        
-    end,
+    prepare = select_host,
     script_file = "https://raw.githubusercontent.com/sevir/essh_utils/refs/heads/main/install_essh.sh"
 }
 

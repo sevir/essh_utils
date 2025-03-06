@@ -89,6 +89,23 @@ function table_join(table, separator)
     return result
 end
 
+function select_host(t)
+    local sh = require("sh")
+
+    if not t.args[1] then
+        print("This is the list of hosts:\n")
+        sh.essh("--hosts"):print()
+        local question = require("question")
+
+        print("\n\nPlease inform the target to execute the task")
+        t.targets = question.ask("Host or tag: ")
+
+        return true
+    else
+        t.targets = t.args[1]
+        return true
+    end
+end
 
 
 -- Capistrano like deploy
